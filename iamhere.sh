@@ -12,13 +12,10 @@ echo "We will close your meeting at $endclass"
 
 open "zoommtg://zoom.us/join?confno=$meetingnumber"
 
-while true
-do
-  NOW=$(date +"%H:%M")
-  echo "Waiting for class to end..."
-  if [ $NOW = $endclass ]
-  then
-    #ps aux | grep -i zoom
-    pkill zoom
-  fi
-done
+echo "Waiting for class to end..."
+
+endclass_h="${endclass%%:*}"
+endclass_m="${endclass##*:}"
+
+sleep $(( endclass_h*3600 + endclass_m*60 - $(date +"%H*3600 - (10#%M*60 + 10#%S)") ))
+pkill zoom
